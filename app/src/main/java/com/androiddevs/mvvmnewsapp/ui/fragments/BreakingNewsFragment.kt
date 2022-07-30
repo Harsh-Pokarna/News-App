@@ -3,6 +3,8 @@ package com.androiddevs.mvvmnewsapp.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.adapters.NewsAdapter
@@ -11,8 +13,6 @@ import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.hideProgressBar
 import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.showProgressBar
 import com.androiddevs.mvvmnewsapp.utils.Resource
 import kotlinx.android.synthetic.main.fragment_breaking_news.*
-import kotlinx.android.synthetic.main.fragment_search_news.*
-import kotlinx.coroutines.Job
 
 class BreakingNewsFragment : BaseFragment(R.layout.fragment_breaking_news) {
 
@@ -30,6 +30,7 @@ class BreakingNewsFragment : BaseFragment(R.layout.fragment_breaking_news) {
         viewModel.getBreakingNews("us")
         setupRecyclerView()
         setObservers()
+        setListeners()
     }
 
     private fun setupRecyclerView() {
@@ -66,4 +67,20 @@ class BreakingNewsFragment : BaseFragment(R.layout.fragment_breaking_news) {
         }
     }
 
+    private fun setListeners() {
+        newsAdapter.setOnItemClickedListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            findNavController().navigate(
+                R.id.action_breakingNewsFragment_to_articleFragment,
+                bundle
+            )
+//            Navigation.findNavController(requireView()).navigate(
+//                R.id.action_breakingNewsFragment_to_articleFragment,
+//                bundle
+//            )
+
+        }
+    }
 }

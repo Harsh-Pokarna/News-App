@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.adapters.NewsAdapter
@@ -13,7 +14,6 @@ import com.androiddevs.mvvmnewsapp.utils.Constants.SEARCH_NEWS_DELAY_TIME
 import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.hideProgressBar
 import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.showProgressBar
 import com.androiddevs.mvvmnewsapp.utils.Resource
-import kotlinx.android.synthetic.main.fragment_breaking_news.*
 import kotlinx.android.synthetic.main.fragment_search_news.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -78,10 +78,21 @@ class SearchNewsFragment : BaseFragment(R.layout.fragment_search_news) {
                 delay(SEARCH_NEWS_DELAY_TIME)
                 editable?.let {
                     if (editable.toString().isNotEmpty()) {
-                       viewModel.searchNews(editable.toString())
+                        viewModel.searchNews(editable.toString())
                     }
                 }
             }
+        }
+
+        newsAdapter.setOnItemClickedListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            requireActivity().supportFragmentManager.findFragmentById(R.id.newsNavHostFragment)
+                ?.findNavController()?.navigate(
+                    R.id.action_searchNewsFragment_to_articleFragment,
+                    bundle
+                )
         }
     }
 
