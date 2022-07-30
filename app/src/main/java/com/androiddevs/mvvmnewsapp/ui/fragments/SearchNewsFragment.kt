@@ -7,6 +7,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.adapters.NewsAdapter
 import com.androiddevs.mvvmnewsapp.base.BaseFragment
@@ -14,6 +15,7 @@ import com.androiddevs.mvvmnewsapp.utils.Constants.SEARCH_NEWS_DELAY_TIME
 import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.hideProgressBar
 import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.showProgressBar
 import com.androiddevs.mvvmnewsapp.utils.Resource
+import kotlinx.android.synthetic.main.fragment_breaking_news.*
 import kotlinx.android.synthetic.main.fragment_search_news.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -88,12 +90,20 @@ class SearchNewsFragment : BaseFragment(R.layout.fragment_search_news) {
             val bundle = Bundle().apply {
                 putSerializable("article", it)
             }
-            requireActivity().supportFragmentManager.findFragmentById(R.id.newsNavHostFragment)
-                ?.findNavController()?.navigate(
-                    R.id.action_searchNewsFragment_to_articleFragment,
-                    bundle
-                )
+            findNavController().navigate(
+                R.id.action_searchNewsFragment_to_articleFragment,
+                bundle
+            )
         }
+
+        rvSearchNews.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.searchNews(etSearch.text.toString())
+                }
+            }
+        })
     }
 
 }

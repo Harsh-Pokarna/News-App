@@ -35,5 +35,6 @@ class NewsActivity : AppCompatActivity() {
     private fun init() {
         supportFragmentManager.findFragmentById(R.id.newsNavHostFragment)?.findNavController()
             ?.let { bottomNavigationView.setupWithNavController(it) }
+
     }
 }

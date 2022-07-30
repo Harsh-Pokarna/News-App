@@ -11,6 +11,7 @@ import com.androiddevs.mvvmnewsapp.base.BaseFragment
 import com.androiddevs.mvvmnewsapp.models.Article
 import com.androiddevs.mvvmnewsapp.ui.NewsActivity
 import com.androiddevs.mvvmnewsapp.ui.NewsViewModel
+import com.androiddevs.mvvmnewsapp.utils.ExtFunctions.showSnackBar
 import kotlinx.android.synthetic.main.fragment_article.*
 
 class ArticleFragment : BaseFragment(R.layout.fragment_article) {
@@ -26,6 +27,7 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
     private fun init() {
         initialiseVariables()
+        setListeners()
     }
 
     private fun initialiseVariables() {
@@ -38,6 +40,13 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
         webView.apply {
             webViewClient = WebViewClient()
             loadUrl(article.url)
+        }
+    }
+
+    private fun setListeners() {
+        fab.setOnClickListener {
+            viewModel.saveArticle(article)
+            showSnackBar(requireView(), "Article Saved")
         }
     }
 
